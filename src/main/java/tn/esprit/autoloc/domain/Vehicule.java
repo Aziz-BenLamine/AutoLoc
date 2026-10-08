@@ -1,4 +1,5 @@
 package tn.esprit.autoloc.domain;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,9 @@ import tn.esprit.autoloc.domain.enums.CategorieVehicule;
 import tn.esprit.autoloc.domain.enums.StatutVehicule;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "vehicule")
 @Getter
@@ -24,4 +28,16 @@ public class Vehicule {
     private CategorieVehicule categorie;
     private BigDecimal tarifJournalier;
     private StatutVehicule statut;
+
+    @ManyToOne
+    Agence agence;
+
+    @OneToMany(mappedBy = "vehicule")
+    List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL)
+    List<Maintenance> maintenances = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    List<Equipement> equipements = new ArrayList<>();
 }
